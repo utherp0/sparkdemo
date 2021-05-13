@@ -1,0 +1,59 @@
+cmd:
+$SPARK_HOME/bin/spark-submit
+--class org.uth.sparkdemo.PiSparkTest1
+--master k8s://https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT
+--conf spark.kubernetes.namespace=cutdownodh
+--deploy-mode cluster
+--conf spark.app.name=uthspark
+--conf spark.kubernetes.container.image=quay.io/ilawson/sparktest1:latest
+--conf spark.kubernetes.submission.waitAppCompletion=false
+--conf spark.driver.cores=0.5
+--conf spark.kubernetes.driver.limit.cores=500m
+--conf spark.driver.memory=512m
+--conf spark.kubernetes.authenticate.driver.serviceAccountName=spark-operator
+--conf spark.kubernetes.driver.label.version=2.3.0
+--conf spark.kubernetes.driver.label.radanalytics.io/SparkApplication=uthspark
+--conf spark.kubernetes.executor.label.radanalytics.io/SparkApplication=uthspark
+--conf spark.kubernetes.driverEnv.APPLICATION_NAME=uthspark
+--conf spark.executorEnv.APPLICATION_NAME=uthspark
+--conf spark.executor.instances=1
+--conf spark.executor.cores=1
+--conf spark.executor.memory=512m
+--conf spark.jars.ivy=/tmp/.ivy2 local:///opt/sparktests-1.0.jar && echo -e
+
+task/pod will be rescheduled in 31536000 seconds.. && sleep 31536000
+
+
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/opt/spark/jars/spark-unsafe_2.12-3.0.0.jar) to constructor java.nio.DirectByteBuffer(long,int)
+WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+21/05/13 14:28:15 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+21/05/13 14:28:16 INFO SparkKubernetesClientFactory: Auto-configuring K8S client using current context from users K8S config file
+Exception in thread "main" java.lang.IllegalArgumentException: spark.driver.cores should be int, but was 0.5
+	at org.apache.spark.internal.config.ConfigHelpers$.toNumber(ConfigBuilder.scala:35)
+	at org.apache.spark.internal.config.ConfigBuilder.$anonfun$intConf$1(ConfigBuilder.scala:230)
+	at org.apache.spark.internal.config.ConfigBuilder.$anonfun$intConf$1$adapted(ConfigBuilder.scala:230)
+	at scala.Option.map(Option.scala:230)
+	at org.apache.spark.internal.config.ConfigEntryWithDefault.readFrom(ConfigEntry.scala:112)
+	at org.apache.spark.SparkConf.get(SparkConf.scala:270)
+	at org.apache.spark.deploy.k8s.KubernetesConf.get(KubernetesConf.scala:63)
+	at org.apache.spark.deploy.k8s.features.BasicDriverFeatureStep.<init>(BasicDriverFeatureStep.scala:45)
+	at org.apache.spark.deploy.k8s.submit.KubernetesDriverBuilder.buildFromFeatures(KubernetesDriverBuilder.scala:41)
+	at org.apache.spark.deploy.k8s.submit.Client.run(KubernetesClientApplication.scala:98)
+	at org.apache.spark.deploy.k8s.submit.KubernetesClientApplication.$anonfun$run$4(KubernetesClientApplication.scala:221)
+	at org.apache.spark.deploy.k8s.submit.KubernetesClientApplication.$anonfun$run$4$adapted(KubernetesClientApplication.scala:215)
+	at org.apache.spark.util.Utils$.tryWithResource(Utils.scala:2539)
+	at org.apache.spark.deploy.k8s.submit.KubernetesClientApplication.run(KubernetesClientApplication.scala:215)
+	at org.apache.spark.deploy.k8s.submit.KubernetesClientApplication.start(KubernetesClientApplication.scala:188)
+	at org.apache.spark.deploy.SparkSubmit.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:928)
+	at org.apache.spark.deploy.SparkSubmit.doRunMain$1(SparkSubmit.scala:180)
+	at org.apache.spark.deploy.SparkSubmit.submit(SparkSubmit.scala:203)
+	at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:90)
+	at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1007)
+	at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1016)
+	at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+21/05/13 14:28:16 INFO ShutdownHookManager: Shutdown hook called
+21/05/13 14:28:16 INFO ShutdownHookManager: Deleting directory /tmp/spark-1260aad7-8ebb-4b91-8cf0-d7dd5b99270c
