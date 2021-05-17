@@ -1,0 +1,28 @@
+apiVersion: sparkoperator.k8s.io/v1beta1
+kind: SparkApplication
+metadata:
+  name: uthwithpvc
+spec:
+  sparkVersion: 3.1.1
+  type: Java
+  mode: cluster
+  image: datamechanics/spark:3.1.1-latest
+  mainClass: org.apache.spark.examples.JavaWordCount
+  mainApplicationFile: local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar
+  sparkConf:
+    "spark.kubernetes.driver.volumes.persistentVolumeClaim.rwxpvc.options.claimName": "playground"
+    "spark.kubernetes.driver.volumes.persistentVolumeClaim.rwxpvc.mount.path": "/mnt/playground"
+    "spark.kubernetes.executor.volumes.persistentVolumeClaim.rwxpvc.options.claimName": "playground"
+    "spark.kubernetes.executor.volumes.persistentVolumeClaim.rwxpvc.mount.path": "/mnt/playground"
+  arguments:
+    - /mnt/playground/data/words.txt
+driver:
+  serviceAccount: 'spark'
+  labels:
+    type: spark-application
+  cores: 1
+  coreLimit: 1
+executor:
+  instances: 2
+  cores: 1
+  coreLimit: 1
