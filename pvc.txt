@@ -1,0 +1,4 @@
+  --conf spark.kubernetes.driver.volumes.persistentVolumeClaim.rwxpvc.options.claimName=(claimname) \
+  --conf spark.kubernetes.driver.volumes.persistentVolumeClaim.rwxpvc.mount.path=(mount dir for driver) \
+  --conf spark.kubernetes.executor.volumes.persistentVolumeClaim.rwxpvc.options.claimName=(claimname) \
+  --conf spark.kubernetes.executor.volumes.persistentVolumeClaim.rwxpvc.mount.path=(mount dir for driver) \
